@@ -7,7 +7,7 @@ import { FaFilter } from 'react-icons/fa';
 
 export const Search = ({ term }: { term?: string }) => {
   const { push } = useRouter()
-  const genres = ['Lunes', 'Martes', 'Miercoles', 'Viernes', 'Jueves', 'Sabado', 'Domingo'];
+  const genres = ['Lunes', 'Martes', 'Miercoles', 'Viernes', 'Jueves', 'Sabado', 'Domingo', 'modo', 'coto'];
 
   const router = useRouter();
   const [query, setQuery] = useState('');
@@ -45,7 +45,6 @@ export const Search = ({ term }: { term?: string }) => {
           defaultValue={typeof term === 'string' ? decodeURI(term) : ''}
           autoComplete="off"
           className="block w-full p-4 pl-10 text-sm text-white placeholder-gray-400 border rounded-2xl border-slate-700 bg-slate-900 focus:border-pink-500 outline-pink-600"
-          required
         />
         <button
           type="submit"

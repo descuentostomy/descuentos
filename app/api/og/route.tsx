@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     const hasTitle = searchParams.has('title')
     const title = hasTitle
       ? searchParams.get('title')?.slice(0, 100)
-      : 'Xata Movie Database'
+      : 'Descuentos Tomy'
 
     // ?image=<image-url>
     const image = hasTitle ? searchParams.get('image')?.slice(0, 100) : null

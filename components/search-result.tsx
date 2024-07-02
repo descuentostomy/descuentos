@@ -3,10 +3,12 @@ import { getMovies } from '~/lib/db.server'
 
 export const SearchResult = async ({
   searchTerm = '',
+  filters = '',
 }: {
   searchTerm?: string
+  filters?: string
 }) => {
-  const { titles = [] } = await getMovies(searchTerm)
+  const { titles = [] } = await getMovies(searchTerm, filters)
 
   return (
     <>

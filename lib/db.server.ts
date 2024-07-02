@@ -1,6 +1,6 @@
 import 'server-only'
 import { getXataClient, TitlesRecord } from '~/lib/xata.codegen'
-import { gte, le } from '@xata.io/client'
+import { gte, le, includes, contains, includesAll, includesAny } from '@xata.io/client'
 import { movie, movieList, OMDBschema } from './schemas'
 
 const xata = getXataClient()
@@ -93,30 +93,44 @@ export const fetchDefaultTitles = async () => {
   }
 }
 
-export const searchMovies = async (term: string) => {
-  const { records } = await xata.db.titles.search(term, {
-    fuzziness: term.length > 8 ? 2 : 0,
-    prefix: 'phrase',
+export const searchMovies = async (term: string, filters: string) => {
+  // Convert the comma-separated filters string into an array of genres
+  const genresFilter = filters ? filters.split(',') : [];
 
-    filter: {
-      titleType: 'movie',
-      startYear: le(new Date().getFullYear()),
+  // Construct the filter object based on whether filters are provided
+  let filterTerm: any = {
+    summary: contains(term)
+  };
+
+  if (filters) {
+    // Use $in operator to match any genre in genresFilter array
+    filterTerm.genres = { $includesAny: genresFilter.map(genre => contains(genre)) };
+    // filterTerm.genres = { $includesAny: [{ $contains: 'modo' }] }
+  }
+
+  console.log(JSON.stringify(filterTerm));
+
+  const { records } = await xata.db.titles
+  .filter(filterTerm)
+  .select([
+    "titleType",
+    "primaryTitle",
+    "originalTitle",
+    "isAdult",
+    "startYear",
+    "endYear",
+    "runtimeMinutes",
+    "genres",
+    "numVotes",
+    "averageRating",
+    "coverUrl",
+    "summary",
+  ])
+  .getPaginated({
+    pagination: {
+      size: 15,
     },
-    boosters: [
-      {
-        valueBooster: { column: 'primaryTitle', factor: 5, value: term },
-      },
-      {
-        numericBooster: { column: 'numVotes', factor: 0.00001 },
-      },
-      {
-        numericBooster: { column: 'averageRating', factor: 10 },
-      },
-      {
-        numericBooster: { column: 'startYear', factor: 1 },
-      },
-    ],
-  })
+  });
 
   return {
     titles: movieList.parse(
@@ -125,8 +139,8 @@ export const searchMovies = async (term: string) => {
   }
 }
 
-export const getMovies = async (term: string) => {
-  return term.length > 0 ? await searchMovies(term) : await fetchDefaultTitles()
+export const getMovies = async (term: string, filters: string) => {
+  return term.length > 0 || filters.length > 0 ? await searchMovies(term, filters) : await fetchDefaultTitles()
 }
 
 export const voteRating = async (vote: number, title: string) => {
