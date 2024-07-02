@@ -1,5 +1,6 @@
 import { type ReactNode } from 'react'
 import { TopNav } from '~/components/top-nav'
+import Footer from '../components/footer';
 import '~/lib/globals.css'
 
 import { type Metadata } from 'next'
@@ -39,16 +40,7 @@ function RootLayout({ children, modal }: RootLayoutProps) {
 
         <main className="container mx-auto">{children}</main>
         {modal}
-        <footer className="flex items-center justify-center gap-2 py-12">
-          <span>Copyright 2024 - Descuentos Tomy</span>
-          <a
-            className="inline-block"
-            href="https://xata.io"
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-          </a>
-        </footer>
+        <Footer />
       </body>
     </html>
   )

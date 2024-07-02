@@ -74,7 +74,7 @@ export const fetchDefaultTitles = async () => {
     .filter({
       $exists: 'startYear',
       titleType: 'movie',
-      isAdult: false,
+      isAdult: true,
     })
     .filter({
       startYear: le(new Date().getFullYear()),
