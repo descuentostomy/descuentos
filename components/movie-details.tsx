@@ -76,9 +76,7 @@ export async function MovieDetails({ id }: { id: string }) {
             </div>
           </div>
           <p className="pt-4 mx-auto max-w-prose">{summary}</p>
-          <p className="pt-4 text-gray-400">
-            Duration: {runtimeMinutes} minutes.
-          </p>
+         
         </section>
       </article>
     </div>
