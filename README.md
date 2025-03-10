@@ -54,7 +54,7 @@ This task will add **100 rows of mocked data** to get you started with a working
 
 ## Run Locally 🧑‍✈️
 
-Once you project is linked and database has data, you can start the development server.
+Once you project is linked and database has data, you can start the development server....
 
 ```sh
 pnpm dev
